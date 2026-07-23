@@ -2,56 +2,35 @@ import java.util.Scanner;
 
 public class PalindromeCheck {
 
-    // 1. Iterative Approach
-    public static boolean isPalindromeIterative(String str) {
-        if (str == null) return false;
-        if (str.isEmpty()) return true;
+    // 1. Reverse and Compare Approach
+    public static boolean isPalindromeByReverse(String s) {
+        if (s == null) return false;
 
-        int left = 0;
-        int right = str.length() - 1;
-
-        while (left < right) {
-            if (str.charAt(left) != str.charAt(right)) {
-                return false;
-            }
-            left++;
-            right--;
+        StringBuilder reversed = new StringBuilder();
+        for (int i = s.length() - 1; i >= 0; i--) {
+            reversed.append(s.charAt(i));
         }
-        return true;
+        return s.equals(reversed.toString());
     }
 
-    // 2. Recursive Approach
-    public static boolean isPalindromeRecursive(String str, int left, int right) {
-        if (str == null) return false;
-
-        // Base Case 1: ตัวชี้ชนกันหรือสวนทางกัน (แสดงว่าเป็น Palindrome)
+    // 2. Recursive Two-Pointer Approach
+    public static boolean isPalindromeRecursive(String s, int left, int right) {
+        if (s == null) return false;
         if (left >= right) return true;
 
-        // Base Case 2: ตัวอักษรฝั่งซ้ายและขวาไม่ตรงกัน
-        if (str.charAt(left) != str.charAt(right)) return false;
-
-        // Recursive Case: ขยับตัวชี้ซ้ายไปขวา และตัวชี้ขวาไปซ้าย
-        return isPalindromeRecursive(str, left + 1, right - 1);
+        if (s.charAt(left) != s.charAt(right)) {
+            return false;
+        }
+        return isPalindromeRecursive(s, left + 1, right - 1);
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        try {
-            if (!sc.hasNextLine()) return;
-
-            String input = sc.nextLine();
-            if (input == null || input.isEmpty()) {
-                System.out.println(true);
-            } else {
-                boolean result = isPalindromeRecursive(input, 0, input.length() - 1);
-                System.out.println(result);
-            }
-
-        } catch (Exception e) {
-            System.out.println("Error: Invalid input format.");
-        } finally {
-            sc.close();
+        Scanner scanner = new Scanner(System.in);
+        if (scanner.hasNextLine()) {
+            String input = scanner.nextLine();
+            boolean result = isPalindromeRecursive(input, 0, input.length() - 1);
+            System.out.println(result);
         }
+        scanner.close();
     }
 }
