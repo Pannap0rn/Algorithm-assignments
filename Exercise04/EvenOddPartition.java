@@ -3,52 +3,89 @@ import java.util.Scanner;
 
 public class EvenOddPartition {
 
-    // 1. Recursive Two-Pointer
-    public static void rearrangeRecursive(int[] a, int left, int right) {
-        if (left >= right) return;
-        if (a[left] % 2 == 0) rearrangeRecursive(a, left + 1, right);
-        else if (a[right] % 2 != 0) rearrangeRecursive(a, left, right - 1);
-        else {
-            int temp = a[left]; a[left] = a[right]; a[right] = temp;
-            rearrangeRecursive(a, left + 1, right - 1);
-        }
-    }
+    // 1. Iterative Approach
+    public static void partitionIterative(int[] arr) {
+        if (arr == null || arr.length <= 1) return;
 
-    // 2. Iterative Two-Pointer
-    public static void rearrangeTwoPointer(int[] a) {
-        int left = 0, right = a.length - 1;
+        int left = 0;
+        int right = arr.length - 1;
+
         while (left < right) {
-            while (left < right && a[left] % 2 == 0) left++;
-            while (left < right && a[right] % 2 != 0) right--;
+            // ขยับ left ไปทางขวาถ้าเป็นเลขคู่แล้ว
+            while (left < right && arr[left] % 2 == 0) {
+                left++;
+            }
+            // ขยับ right ไปทางซ้ายถ้าเป็นเลขคี่แล้ว
+            while (left < right && arr[right] % 2 != 0) {
+                right--;
+            }
+            // สลับตำแหน่งเลขคี่ที่เจอทางซ้าย กับเลขคู่ที่เจอทางขวา
             if (left < right) {
-                int temp = a[left]; a[left] = a[right]; a[right] = temp;
-                left++; right--;
+                int temp = arr[left];
+                arr[left] = arr[right];
+                arr[right] = temp;
+                left++;
+                right--;
             }
         }
     }
 
-    // 3. Extra Array
-    public static int[] rearrangeExtraArray(int[] a) {
-        int[] res = new int[a.length];
-        int left = 0, right = a.length - 1;
-        for (int n : a) res[n % 2 == 0 ? left++ : right--] = n;
-        return res;
+    // 2. Recursive Approach
+    public static void partitionRecursive(int[] arr, int left, int right) {
+        if (arr == null) return;
+
+        // Base Case
+        if (left >= right) return;
+
+        if (arr[left] % 2 == 0) {
+            // ถ้าฝั่งซ้ายเป็นเลขคู่อยู่แล้ว ขยับซ้าย
+            partitionRecursive(arr, left + 1, right);
+        } else if (arr[right] % 2 != 0) {
+            // ถ้าฝั่งขวาเป็นเลขคี่อยู่แล้ว ขยับขวา
+            partitionRecursive(arr, left, right - 1);
+        } else {
+            // Recursive Case
+            int temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
+            partitionRecursive(arr, left + 1, right - 1);
+        }
+    }
+
+    private static int[] parseInputArray(String input) {
+        if (input == null || input.trim().isEmpty()) return new int[0];
+
+        String clean = input.replaceAll("[\\[\\]]", "").trim();
+        if (clean.isEmpty()) return new int[0];
+
+        String[] tokens = clean.split(",");
+        int[] arr = new int[tokens.length];
+        for (int i = 0; i < tokens.length; i++) {
+            arr[i] = Integer.parseInt(tokens[i].trim());
+        }
+        return arr;
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Input:");
 
-        // รับค่า
-        String inputStr = sc.nextLine().replaceAll("[\\[\\]]", "");
-        int[] arr = Arrays.stream(inputStr.split("[,\\s]+"))
-                .mapToInt(Integer::parseInt).toArray();
+        try {
+            System.out.println("Input:");
+            if (!sc.hasNextLine()) return;
 
-        rearrangeRecursive(arr, 0, arr.length - 1);
+            String inputStr = sc.nextLine();
+            int[] arr = parseInputArray(inputStr);
 
-        System.out.println("\nPossible Output:");
-        System.out.println(Arrays.toString(arr));
+            partitionRecursive(arr, 0, arr.length - 1);
+            System.out.println("\nPossible Output:");
+            System.out.println(Arrays.toString(arr));
 
-        sc.close();
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Invalid integer array input.");
+        } catch (Exception e) {
+            System.out.println("Error: Invalid input format.");
+        } finally {
+            sc.close();
+        }
     }
 }
