@@ -1,51 +1,57 @@
+import java.util.Scanner;
+
 public class PalindromeCheck {
-    private static String preprocess(String s) {
-        if (s == null) return "";
-        return s.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
-    }
-    // อัลกอริทึมที่ 1: Reverse and Compare
-    public static boolean isPalindromeByReverse(String s) {
-        String cleaned = preprocess(s);
-        String reversed = new StringBuilder(cleaned).reverse().toString();
-        return cleaned.equals(reversed);
-    }
-    // อัลกอริทึมที่ 2: Recursive Two-Pointer
-    public static boolean isPalindromeRecursive(String s, int left, int right) {
-        // Base case 1
-        if (left >= right) {
-            return true;
+
+    // 1. Iterative Approach
+    public static boolean isPalindromeIterative(String str) {
+        if (str == null) return false;
+        if (str.isEmpty()) return true;
+
+        int left = 0;
+        int right = str.length() - 1;
+
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
         }
-        // Base case 2
-        if (s.charAt(left) != s.charAt(right)) {
-            return false;
-        }
-        // Recursive step
-        return isPalindromeRecursive(s, left + 1, right - 1);
+        return true;
     }
 
-    // Overload Method
-    public static boolean isPalindromeRecursive(String s) {
-        String cleaned = preprocess(s);
-        return isPalindromeRecursive(cleaned, 0, cleaned.length() - 1);
+    // 2. Recursive Approach
+    public static boolean isPalindromeRecursive(String str, int left, int right) {
+        if (str == null) return false;
+
+        // Base Case 1: ตัวชี้ชนกันหรือสวนทางกัน (แสดงว่าเป็น Palindrome)
+        if (left >= right) return true;
+
+        // Base Case 2: ตัวอักษรฝั่งซ้ายและขวาไม่ตรงกัน
+        if (str.charAt(left) != str.charAt(right)) return false;
+
+        // Recursive Case: ขยับตัวชี้ซ้ายไปขวา และตัวชี้ขวาไปซ้าย
+        return isPalindromeRecursive(str, left + 1, right - 1);
     }
 
     public static void main(String[] args) {
-        String[] testCases = {
-                "racecar",
-                "level",
-                "algorithm",
-                "gohangasalamiimalasagnahog",
-                "A man, a plan, a canal: Panama" // ตัวอย่างละเว้นช่องว่าง/ตัวพิมพ์ใหญ่-เล็ก
-        };
+        Scanner sc = new Scanner(System.in);
 
-        System.out.println("=== Testing Algorithm 1: Reverse & Compare ===");
-        for (String tc : testCases) {
-            System.out.println("\"" + tc + "\" -> " + isPalindromeByReverse(tc));
-        }
+        try {
+            if (!sc.hasNextLine()) return;
 
-        System.out.println("\n=== Testing Algorithm 2: Recursive Two-Pointer ===");
-        for (String tc : testCases) {
-            System.out.println("\"" + tc + "\" -> " + isPalindromeRecursive(tc));
+            String input = sc.nextLine();
+            if (input == null || input.isEmpty()) {
+                System.out.println(true);
+            } else {
+                boolean result = isPalindromeRecursive(input, 0, input.length() - 1);
+                System.out.println(result);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error: Invalid input format.");
+        } finally {
+            sc.close();
         }
     }
 }
