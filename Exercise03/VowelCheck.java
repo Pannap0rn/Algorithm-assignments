@@ -57,32 +57,25 @@ public class VowelCheck {
 
     // Helper สำหรับนับและแสดงผล
     public static void printAnalysis(String input) {
-        int vowels = 0;
-        int consonants = 0;
-
-        if (input != null) {
-            for (int i = 0; i < input.length(); i++) {
-                char ch = input.charAt(i);
-                if (isVowel(ch)) vowels++;
-                else if (isConsonant(ch)) consonants++;
-            }
-        }
-
+        int[] counts = countRecursiveHelper(input, 0);
+        int vowels = counts[0];
+        int consonants = counts[1];
         boolean result = vowels > consonants;
-        System.out.println("Input: " + input);
+
         System.out.println("Vowels: " + vowels);
         System.out.println("Consonants: " + consonants);
         System.out.println("Result: " + result);
     }
 
-    // Main Method: รับ Input จากผู้ใช้
+    // Main Method
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        System.out.print("Input: ");
 
-        System.out.print("Enter text: ");
-        String input = scanner.nextLine();
-
-        printAnalysis(input);
+        if (scanner.hasNextLine()) {
+            String input = scanner.nextLine();
+            printAnalysis(input);
+        }
 
         scanner.close();
     }
