@@ -1,4 +1,5 @@
 import java.util.Scanner;
+
 public class VowelCheck {
 
     // Helper check สระ
@@ -7,7 +8,7 @@ public class VowelCheck {
         return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u';
     }
 
-    // Helper check พยัญชนะ
+    // Helper check พยัญชนะ (ไม่นับตัวเลข ช่องว่าง และเครื่องหมายพิเศษ)
     private static boolean isConsonant(char ch) {
         ch = Character.toLowerCase(ch);
         return ch >= 'a' && ch <= 'z' && !isVowel(ch);
@@ -55,26 +56,21 @@ public class VowelCheck {
         return vowels > consonants;
     }
 
-    // Helper สำหรับนับและแสดงผล
-    public static void printAnalysis(String input) {
-        int[] counts = countRecursiveHelper(input, 0);
-        int vowels = counts[0];
-        int consonants = counts[1];
-        boolean result = vowels > consonants;
-
-        System.out.println("Vowels: " + vowels);
-        System.out.println("Consonants: " + consonants);
-        System.out.println("Result: " + result);
-    }
-
-    // Main Method
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Input: ");
 
+        System.out.print("Input: ");
         if (scanner.hasNextLine()) {
             String input = scanner.nextLine();
-            printAnalysis(input);
+
+            int[] counts = countRecursiveHelper(input, 0);
+            int vowels = counts[0];
+            int consonants = counts[1];
+            boolean result = vowels > consonants;
+
+            System.out.println("Vowels: " + vowels);
+            System.out.println("Consonants: " + consonants);
+            System.out.println("Result: " + result);
         }
 
         scanner.close();
