@@ -2,55 +2,32 @@ import java.util.Scanner;
 
 public class StringReversal {
 
-    // 1. Iterative Approach
-    public static String reverseIterative(String str) {
-        if (str == null || str.isEmpty()) return str;
-
-        char[] chars = str.toCharArray();
-        int left = 0;
-        int right = chars.length - 1;
-
-        while (left < right) {
-            char temp = chars[left];
-            chars[left] = chars[right];
-            chars[right] = temp;
-            left++;
-            right--;
+    // 1. Recursive Approach
+    public static String reverseRecursive(String s) {
+        if (s == null || s.length() <= 1) {
+            return s;
         }
-
-        return new String(chars);
+        return s.charAt(s.length() - 1) + reverseRecursive(s.substring(0, s.length() - 1));
     }
 
-    // 2. Recursive Approach
-    public static String reverseRecursive(String str) {
-        // Base Case 1
-        if (str == null || str.isEmpty()) return str;
+    // 2. Iterative Approach
+    public static String reverseIterative(String s) {
+        if (s == null) return null;
 
-        // Base Case 2
-        if (str.length() == 1) return str;
-
-        // Recursive Case
-        return str.charAt(str.length() - 1) + reverseRecursive(str.substring(0, str.length() - 1));
+        StringBuilder reversed = new StringBuilder();
+        for (int i = s.length() - 1; i >= 0; i--) {
+            reversed.append(s.charAt(i));
+        }
+        return reversed.toString();
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        try {
-            System.out.println("Input:");
-            String input = sc.nextLine();
-
-            // แสดงผล Output
-            System.out.println("\nOutput");
-
-            // เรียกใช้ Recursive ตามข้อกำหนด
-            String result = reverseRecursive(input);
-            System.out.println(result);
-
-        } catch (Exception e) {
-            System.out.println("Error: Invalid input format.");
-        } finally {
-            sc.close();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Input:  ");
+        if (scanner.hasNextLine()) {
+            String input = scanner.nextLine();
+            System.out.println("Output: " + reverseRecursive(input));
         }
+        scanner.close();
     }
 }
